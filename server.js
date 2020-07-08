@@ -1,38 +1,32 @@
+// Add dependencies
 const express = require("express");
-
 const mongoose = require("mongoose");
 const routes = require("./routes");
-const app = express();
-const PORT = process.env.PORT || 3001;
 
-// Configure body parsing for AJAX requests
+// Declare app as express
+const app = express();
+
+// Define Port - process.env for Heroku, 3000 for localhost
+const PORT = process.env.PORT || 3000;
+
+// Define middleware to allow data to be passed from front-end client to backend
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// Serve up static assets
+
+// Set-up static assets ???
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-// Add routes, both API and view
+// Add routes for both API and HTML
 app.use(routes);
 
-// Connect to the Mongo DB
-// mongoose.connect(
-//   process.env.MONGODB_URI || "mongodb://user1:password1@ds125871.mlab.com:25871/heroku_0xn0jnk7",
-//   {
-//     useCreateIndex: true,
-//     useNewUrlParser: true
-//   }
-// );
+// Connect to Mongo DB - googleBookSearch is the database name
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/googlebooks",
-  {
-    useCreateIndex: true,
-    useNewUrlParser: true
-  }
+  process.env.MONGODB_URI || "mongodb://localhost/googleBookSearch"
 );
 
 // Start the API server
-app.listen(PORT, () =>
-  console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`)
-);
+app.listen(PORT, function () {
+  console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
+});
